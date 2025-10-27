@@ -1,7 +1,5 @@
 'use strict';
 
-// commonjs
-const flatpickr = require('flatpickr');
 // Opisany w dokumentacji
 import flatpickr from 'flatpickr';
 // Dodatkowy import stylów
