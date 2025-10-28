@@ -25,9 +25,8 @@ const options = {
     const elapsedTime = date.getTime() - startTime;
 
     if (elapsedTime > 0) {
-      console.log('future time!');
       startBtn.disabled = false;
-      userSelectedDate = date;
+      userSelectedDate = date.getTime();
       ms = elapsedTime;
     } else {
       window.alert('Please choose a date in the future');
@@ -47,31 +46,43 @@ flatpickr(selector, options);
 let userSelectedDate = 0;
 let ms = 0;
 
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
+function convertMs() {
+  const intervalId = setInterval(() => {
+    const ms = userSelectedDate - Date.now();
 
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+    if (ms <= 1000) {
+      clearInterval(intervalId);
+    }
 
-  return { days, hours, minutes, seconds };
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+
+    // Remaining days
+    const days = Math.floor(ms / day);
+    // Remaining hours
+    const hours = Math.floor((ms % day) / hour);
+    // Remaining minutes
+    const minutes = Math.floor(((ms % day) % hour) / minute);
+    // Remaining seconds
+    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+    daysEl.textContent = days.toString().padStart(2, '0');
+    hoursEl.textContent = hours.toString().padStart(2, '0');
+    minutesEl.textContent = minutes.toString().padStart(2, '0');
+    secondsEl.textContent = seconds.toString().padStart(2, '0');
+    //   return { days, hours, minutes, seconds };
+  }, 1000);
 }
 
-function addLeadingZero(value) {
-  daysEl.textContent = days.toString().padStart(2, '0');
-  hoursEl.textContent = hours.toString().padStart(2, '0');
-  minutesEl.textContent = minutes.toString().padStart(2, '0');
-  secondsEl.textContent = seconds.toString().padStart(2, '0');
-}
+// function addLeadingZero(value) {
+//   daysEl.textContent = days.toString().padStart(2, '0');
+//   hoursEl.textContent = hours.toString().padStart(2, '0');
+//   minutesEl.textContent = minutes.toString().padStart(2, '0');
+//   secondsEl.textContent = seconds.toString().padStart(2, '0');
+// }
 
 startBtn.addEventListener('click', () => {
   convertMs(ms);
