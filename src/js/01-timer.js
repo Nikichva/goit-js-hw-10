@@ -4,6 +4,8 @@
 import flatpickr from 'flatpickr';
 // Dodatkowy import stylów
 import 'flatpickr/dist/flatpickr.min.css';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const selector = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('[data-start]');
@@ -28,8 +30,16 @@ const options = {
       startBtn.disabled = false;
       userSelectedDate = date.getTime();
       ms = elapsedTime;
+      iziToast.success({
+        title: 'OK',
+        message: 'Now press start button!',
+      });
     } else {
-      window.alert('Please choose a date in the future');
+      //   window.alert('Please choose a date in the future');
+      iziToast.error({
+        title: 'Error',
+        message: 'Please choose a date in the future',
+      });
       startBtn.disabled = true;
     }
 
@@ -47,6 +57,7 @@ let userSelectedDate = 0;
 let ms = 0;
 
 function convertMs() {
+  startBtn.disabled = true;
   const intervalId = setInterval(() => {
     const ms = userSelectedDate - Date.now();
 
